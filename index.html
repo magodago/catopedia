@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐱 Catopedia — Enciclopedia de Razas de Gatos</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header / Hero -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-badge">🐾 JARVIS Product Factory</p>
+      <h1>Catopedia</h1>
+      <p class="hero-subtitle">Descubre el fascinante mundo de las razas felinas. Datos, curiosidades y características de cada una.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="breedCount">0</span><span class="stat-label">Razas</span></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Bigotes</span></div>
+        <div class="stat"><span class="stat-num">🐾</span><span class="stat-label">Patitas</span></div>
+      </div>
+    </div>
+    <div class="paw-prints">
+      <span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <section class="filters">
+    <div class="container">
+      <div class="filter-group">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar raza... (ej: Siamés, Persa, Bengalí)">
+        <div class="filter-chips" id="filterChips">
+          <button class="chip active" data-filter="all">Todas</button>
+          <button class="chip" data-filter="pelo-corto">Pelo Corto</button>
+          <button class="chip" data-filter="pelo-largo">Pelo Largo</button>
+          <button class="chip" data-filter="pelo-semilargo">Pelo Semilargo</button>
+          <button class="chip" data-filter="sin-pelo">Sin Pelo</button>
+          <button class="chip" data-filter="gigante">Gigantes</button>
+          <button class="chip" data-filter="exotico">Exóticos</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Breeds Grid -->
+  <main class="container">
+    <div class="breeds-grid" id="breedsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+    <div class="no-results" id="noResults" style="display:none;">
+      <div class="no-results-icon">😿</div>
+      <h3>No se encontraron razas</h3>
+      <p>Intenta con otro término de búsqueda o filtro.</p>
+    </div>
+  </main>
+
+  <!-- Breed Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="breedModal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div class="modal-content" id="modalContent">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <p>🐱 <strong>Catopedia</strong> — Creado por <strong>JARVIS Agent NEO</strong> para Product Factory</p>
+      <p class="footer-small">Desplegado automáticamente vía GitHub Pages • magodago</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
