@@ -1,272 +1,285 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catopedia — Razas de Gatos</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #080013; color: #e8e0ff; font-family: 'Inter', sans-serif; }
-.hero { background: linear-gradient(135deg, #0d0020 0%, #1a0040 100%); padding: 40px 20px; text-align: center; border-bottom: 1px solid rgba(0,212,255,0.2); }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: 3em; color: #00d4ff; text-shadow: 0 0 20px rgba(0,212,255,0.3); }
-.hero p { color: #6b5b8a; margin-top: 8px; }
-.stats { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
-.stat { text-align: center; }
-.stat-num { font-size: 2em; font-weight: 700; color: #00d4ff; }
-.stat-label { font-size: 0.8em; color: #6b5b8a; display: block; }
-.filters { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
-.chip { padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(0,212,255,0.2); background: rgba(0,212,255,0.05); color: #6b5b8a; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
-.chip.active { background: rgba(0,212,255,0.15); border-color: rgba(0,212,255,0.5); color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
-.search-wrap { text-align: center; padding: 0 20px 20px; }
-.search-input { width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 25px; border: 1px solid rgba(0,212,255,0.2); background: rgba(0,212,255,0.05); color: #e8e0ff; font-size: 0.9em; outline: none; }
-.search-input:focus { border-color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
-.search-input::placeholder { color: #6b5b8a; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto; }
-.card { background: rgba(13,0,32,0.8); border: 1px solid rgba(0,212,255,0.1); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
-.card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,212,255,0.1); }
-.card-img { height: 200px; overflow: hidden; position: relative; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; }
-.card-badge { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border-radius: 12px; font-size: 0.7em; font-weight: 600; }
-.badge-corto { background: rgba(0,212,255,0.2); color: #00d4ff; }
-.badge-largo { background: rgba(123,0,255,0.2); color: #b080ff; }
-.badge-semi { background: rgba(255,179,71,0.2); color: #ffb347; }
-.badge-sin { background: rgba(255,68,102,0.2); color: #ff6688; }
-.badge-gigante { background: rgba(0,255,136,0.2); color: #00ff88; }
-.badge-exotico { background: rgba(255,21,208,0.2); color: #ff40f0; }
-.card-body { padding: 16px; }
-.card-body h3 { font-size: 1.1em; color: #e8e0ff; margin-bottom: 4px; }
-.card-origin { font-size: 0.8em; color: #6b5b8a; margin-bottom: 8px; }
-.card-desc { font-size: 0.85em; color: #8b7baa; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.card-stats { display: flex; gap: 15px; margin-top: 12px; }
-.card-stat-val { font-weight: 600; font-size: 0.85em; color: #00d4ff; }
-.card-stat-label { font-size: 0.7em; color: #6b5b8a; display: block; }
-.no-results { text-align: center; padding: 60px 20px; color: #6b5b8a; display: none; }
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-.modal-overlay.active { opacity: 1; pointer-events: auto; }
-.modal { background: #0d0020; border: 1px solid rgba(0,212,255,0.2); border-radius: 20px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; }
-.modal-img { width: 100%; height: 250px; object-fit: cover; }
-.modal-body { padding: 20px; }
-.modal-body h2 { color: #00d4ff; font-size: 1.4em; margin-bottom: 4px; }
-.modal-body h3 { color: #b080ff; font-size: 1em; margin: 16px 0 8px; }
-.modal-body p { color: #8b7baa; font-size: 0.9em; line-height: 1.5; }
-.modal-close { position: absolute; top: 10px; right: 20px; font-size: 2em; color: #6b5b8a; cursor: pointer; background: none; border: none; }
-.modal-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
-.modal-stat { background: rgba(0,212,255,0.05); border-radius: 12px; padding: 12px; text-align: center; }
-.modal-stat .val { font-size: 1.1em; font-weight: 600; color: #00d4ff; }
-.modal-stat .lbl { font-size: 0.7em; color: #6b5b8a; margin-top: 2px; }
-@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .hero h1 { font-size: 2em; } }
-</style>
-</head>
-<body>
-
-<div class="hero">
-  <h1>🐱 Catopedia</h1>
-  <p>Enciclopedia de razas felinas • <span id="breedCount">0</span> razas</p>
-  <div class="stats">
-    <div class="stat"><span class="stat-num" id="totalCount">0</span><span class="stat-label">Razas</span></div>
-    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Bigotes</span></div>
-  </div>
-</div>
-
-<div class="filters">
-  <span class="chip active" data-filter="all">Todas</span>
-  <span class="chip" data-filter="pelo-corto">Pelo Corto</span>
-  <span class="chip" data-filter="pelo-largo">Pelo Largo</span>
-  <span class="chip" data-filter="pelo-semilargo">Pelo Semilargo</span>
-  <span class="chip" data-filter="sin-pelo">Sin Pelo</span>
-  <span class="chip" data-filter="gigante">Gigantes</span>
-  <span class="chip" data-filter="exotico">Exóticos</span>
-</div>
-
-<div class="search-wrap">
-  <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar por nombre, origen o descripción...">
-</div>
-
-<div class="grid" id="breedsGrid"></div>
-<div class="no-results" id="noResults">😿 No se encontraron razas con ese filtro. Prueba otra búsqueda.</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modalContent"></div>
-</div>
-
-<script>
-// ============ DATA ============
-const breeds = [
-  {id:"siames",name:"Siamés",nameEng:"Siamese",origin:"Tailandia",type:"pelo-corto",desc:"Una de las razas más antiguas. Vocales, inteligentes y leales. Famosos por su patrón colorpoint y ojos azules.",history:"Originarios de Siam, eran gatos sagrados en templos budistas. Llegaron a Occidente en el siglo XIX.",temperament:"Extremadamente sociables y vocales. Forman vínculos muy fuertes.",img:"https://images.unsplash.com/photo-1611915387289-08be07d7ce0d?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-20 años",personality:"Vocal, cariñoso, inteligente",colors:["Seal point","Blue point","Chocolate point","Lilac point"],care:"Cepillado semanal. Propensos a problemas respiratorios."},
-  {id:"persa",name:"Persa",nameEng:"Persian",origin:"Irán (Persia)",type:"pelo-largo",desc:"El epítome del lujo felino. Rostro plano, pelaje exuberante y temperamento tranquilo. Perfectos para hogares silenciosos.",history:"Llegaron a Europa desde Persia en el siglo XVII. La reina Victoria fue una gran admiradora.",temperament:"Tranquilos, dulces y algo distantes. Prefieren ambientes serenos.",img:"https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&h=600&fit=crop",weight:"3.5-7 kg",lifespan:"12-17 años",personality:"Tranquilo, dulce, majestuoso",colors:["Blanco","Negro","Azul","Crema","Chocolate","Bicolor"],care:"Cepillado DIARIO. Limpieza ocular frecuente."},
-  {id:"maine-coon",name:"Maine Coon",nameEng:"Maine Coon",origin:"EE.UU (Maine)",type:"pelo-largo",tags:["gigante"],desc:"El gigante gentil. La raza doméstica más grande, superando los 10 kg. Amigables, juguetones y cariñosos.",history:"Raza natural del estado de Maine. La leyenda dice que descienden de gatos de María Antonieta.",temperament:"Juguetones, inteligentes y familiares. Les encanta el agua.",img:"https://images.unsplash.com/photo-1600800634599-33c45ac98d48?w=800&h=600&fit=crop",weight:"5-11 kg",lifespan:"12-15 años",personality:"Gentil, juguetón, familiar",colors:["Marrón tabby","Negro","Blanco","Rojo","Plateado"],care:"Cepillado 2-3 veces/semana. Necesitan espacio."},
-  {id:"bengali",name:"Bengalí",nameEng:"Bengal",origin:"EE.UU (híbrido)",type:"pelo-corto",tags:["exotico"],desc:"Un leopardo en miniatura. Pelaje moteado espectacular, energía infinita e inteligencia superior.",history:"Híbrido creado cruzando gatos domésticos con el leopardo asiático en los años 60.",temperament:"Extremadamente activos, curiosos y atléticos. Necesitan estimulación constante.",img:"https://images.unsplash.com/photo-1591946614720-90e1a156f8da?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"12-16 años",personality:"Energético, inteligente, salvaje",colors:["Marrón spotted","Nieve","Plateado","Carbon"],care:"Cepillado semanal. ALTA demanda de ejercicio."},
-  {id:"sphynx",name:"Sphynx",nameEng:"Sphynx",origin:"Canadá",type:"sin-pelo",tags:["exotico"],desc:"El gato sin pelo más famoso. Piel cálida como gamuza, enormes orejas y personalidad payasa.",history:"Mutación natural aparecida en Toronto en 1966.",temperament:"Extremadamente sociables y dependientes. Buscan calor constantemente.",img:"https://images.unsplash.com/photo-1606214174790-dd4a9a1b0e7b?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Sociable, payaso, cálido",colors:["Todos los colores"],care:"Baños semanales. Proteger del frío y del sol."},
-  {id:"british-shorthair",name:"Británico Pelo Corto",nameEng:"British Shorthair",origin:"Reino Unido",type:"pelo-corto",desc:"El osito de peluche felino. Robusto, tranquilo, pelaje denso y afelpado. Mirada dulce y expresión sonriente.",history:"Descendientes de gatos romanos. Casi extinguidos en guerras mundiales.",temperament:"Tranquilos, reservados pero cariñosos. Rara vez maúllan.",img:"https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop",weight:"4-8 kg",lifespan:"14-20 años",personality:"Tranquilo, leal, independiente",colors:["Azul","Lila","Chocolate","Crema","Blanco","Negro"],care:"Cepillado semanal. Tendencia a obesidad."},
-  {id:"ragdoll",name:"Ragdoll",nameEng:"Ragdoll",origin:"EE.UU",type:"pelo-largo",desc:"Famosos por relajarse como muñecos de trapo al ser cargados. Grandes, dóciles y extremadamente cariñosos.",history:"Creados en California en los 60. Rápidamente se volvieron populares por su temperamento.",temperament:"Dóciles, relajados, cariñosos. Ideales para familias.",img:"https://images.unsplash.com/photo-1501820488136-72669149e0d4?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"12-17 años",personality:"Dócil, cariñoso, relajado",colors:["Seal point","Blue point","Chocolate","Lila","Crema"],care:"Cepillado 2-3 veces/semana. Propensos a obesidad."},
-  {id:"scottish-fold",name:"Scottish Fold",nameEng:"Scottish Fold",origin:"Escocia",type:"pelo-corto",desc:"Inconfundibles por sus orejas plegadas hacia adelante. Dulces, tranquilos y con una mirada que derrite corazones.",history:"El primer Scottish Fold nació en una granja escocesa en 1961.",temperament:"Dulces, tranquilos y muy apegados. Se adaptan bien a cualquier hogar.",img:"https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=800&h=600&fit=crop",weight:"3-6 kg",lifespan:"12-15 años",personality:"Dulce, tranquilo, único",colors:["Todos los colores"],care:"Cepillado semanal. Revisar orejas regularmente."},
-  {id:"abisinio",name:"Abisinio",nameEng:"Abyssinian",origin:"Etiopía/Abisinia",type:"pelo-corto",desc:"Una de las razas más antiguas. Pelaje ticked único, cuerpo atlético y curiosidad infinita. Siempre en movimiento.",history:"Posiblemente descendientes de los gatos del Antiguo Egipto.",temperament:"Curiosos, activos, inteligentes. No son gatos falderos.",img:"https://images.unsplash.com/photo-1536590158209-e9d317d0c16f?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Curioso, activo, inteligente",colors:["Ruddy","Rojo","Azul","Fawn"],care:"Cepillado semanal. Necesitan estimulación."},
-  {id:"noruego-bosque",name:"Bosque de Noruega",nameEng:"Norwegian Forest",origin:"Noruega",type:"pelo-largo",tags:["gigante"],desc:"El gato vikingo. Robusto, pelaje impermeable y cola tupida. Adaptado a los duros inviernos nórdicos.",history:"Raza natural noruega. Mencionados en la mitología nórdica.",temperament:"Independientes pero cariñosos. Buenos cazadores.",img:"https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"14-16 años",personality:"Independiente, cariñoso, vikingo",colors:["Todos los colores"],care:"Cepillado bisemanal. Muda intensa en primavera."},
-  {id:"azul-ruso",name:"Azul Ruso",nameEng:"Russian Blue",origin:"Rusia",type:"pelo-corto",desc:"Elegancia plateada. Doble pelaje azul con puntas brillantes y ojos verde esmeralda. Tímidos con extraños, muy leales.",history:"Originarios del puerto de Arcángel. Llevados a Inglaterra por marineros.",temperament:"Tímidos con extraños, muy leales y cariñosos con su familia.",img:"https://images.unsplash.com/photo-1597626133663-53dfddb9446c?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"15-20 años",personality:"Leal, tímido, elegante",colors:["Azul plateado"],care:"Cepillado semanal. Muy sanos."},
-  {id:"siberiano",name:"Siberiano",nameEng:"Siberian",origin:"Rusia (Siberia)",type:"pelo-largo",tags:["gigante","hipoalergenico"],desc:"Gato nacional ruso. Triple pelaje impermeable. Producen menos proteína Fel d1, tolerables para alérgicos.",history:"Raza natural de bosques siberianos con más de 1000 años.",temperament:"Juguetones, inteligentes, valientes. Les fascina el agua.",img:"https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"12-18 años",personality:"Valiente, juguetón, hipoalergénico",colors:["Marrón tabby","Azul","Rojo","Plata","Blanco"],care:"Cepillado bisemanal. Muda estacional."},
-  {id:"bombay",name:"Bombay",nameEng:"Bombay",origin:"EE.UU",type:"pelo-corto",desc:"La pantera en miniatura. Negro azabache, ojos dorados, pelaje satinado. Parece salvaje, es puro terciopelo.",history:"Creados en Kentucky cruzando Burmeses con Americanos negro.",temperament:"Sociables, cariñosos. Odian estar solos.",img:"https://images.unsplash.com/photo-1595429035839-c99c298ffd73?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-18 años",personality:"Sociable, cariñoso, pantera",colors:["Negro azabache"],care:"Cepillado semanal."},
-  {id:"somali",name:"Somalí",nameEng:"Somali",origin:"EE.UU",type:"pelo-semilargo",desc:"El zorro felino. Abisinios de pelo largo, cola tupida. Hiperactivos, inteligentes y curiosos.",history:"Aparecieron en camadas de Abisinios en los años 40.",temperament:"Hiperactivos, curiosos, acróbatas natos.",img:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=800&h=600&fit=crop",weight:"3.5-5 kg",lifespan:"12-16 años",personality:"Activo, inteligente, acróbata",colors:["Ruddy","Rojo","Azul","Fawn"],care:"Cepillado bisemanal."},
-  {id:"devon-rex",name:"Devon Rex",nameEng:"Devon Rex",origin:"Reino Unido",type:"pelo-corto",desc:"El gato duende. Orejas enormes, cara élfica y pelaje rizado. Traviesos e inteligentes.",history:"Descubiertos en mina de Devon en 1960.",temperament:"Extremadamente sociables y traviesos.",img:"https://images.unsplash.com/photo-1591946614720-90e1a156f8da?w=800&h=600&fit=crop",weight:"2.5-4 kg",lifespan:"10-15 años",personality:"Travieso, inteligente, duende",colors:["Todos"],care:"Limpieza con gamuza."},
-  {id:"ocicat",name:"Ocicat",nameEng:"Ocicat",origin:"EE.UU",type:"pelo-corto",desc:"Parece salvaje pero es 100% doméstico. Pelaje moteado como ocelote. Atlético y sociable.",history:"Creado accidentalmente en 1964.",temperament:"Extrovertidos, se adaptan a todo.",img:"https://images.unsplash.com/photo-1602265587623-e2189d637a76?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"15-18 años",personality:"Sociable, atlético",colors:["Tawny","Chocolate","Canela","Azul","Lavanda"],care:"Cepillado semanal."},
-  {id:"chartreux",name:"Chartreux",nameEng:"Chartreux",origin:"Francia",type:"pelo-corto",desc:"El gato sonriente francés. Robusto, azul grisáceo, ojos cobrizos. Silencioso y observador.",history:"Criados por monjes cartujos desde el siglo XVIII.",temperament:"Silenciosos, observadores, muy inteligentes.",img:"https://images.unsplash.com/photo-1536590158209-e9d317d0c16f?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"13-16 años",personality:"Silencioso, observador",colors:["Azul grisáceo"],care:"Cepillado semanal."},
-  {id:"bobtail-japones",name:"Bobtail Japonés",nameEng:"Japanese Bobtail",origin:"Japón",type:"pelo-corto",desc:"El Maneki Neko de la suerte. Cola como pompón. Activos, inteligentes y muy habladores.",history:"Más de 1000 años en Japón. Símbolo de fortuna.",temperament:"Muy vocales, activos y sociales.",img:"https://images.unsplash.com/photo-1571566882372-1598d88abd90?w=800&h=600&fit=crop",weight:"2.5-4.5 kg",lifespan:"15-18 años",personality:"Vocal, activo, suerte",colors:["Calicó","Blanco y negro","Tortuga"],care:"Cepillado semanal. Muy sanos."},
-  {id:"burmilla",name:"Burmilla",nameEng:"Burmilla",origin:"Reino Unido",type:"pelo-corto",desc:"Mezcla Burmés + Chinchilla Persa. Plateado sombreado, ojos verdes. Dulce y juguetón.",history:"Romance accidental en 1981.",temperament:"Dulces, juguetones, ronronean constantemente.",img:"https://images.unsplash.com/photo-1611915387289-08be07d7ce0d?w=800&h=600&fit=crop",weight:"3-6 kg",lifespan:"12-16 años",personality:"Dulce, juguetón",colors:["Plata","Dorado","Crema"],care:"Cepillado semanal."},
-  {id:"peterbald",name:"Peterbald",nameEng:"Peterbald",origin:"Rusia",type:"sin-pelo",tags:["exotico"],desc:"Elegante gato sin pelo de San Petersburgo. Varios grados de calvicie. Muy cariñoso.",history:"Creado en 1994 en San Petersburgo.",temperament:"Muy cariñosos e interactivos.",img:"https://images.unsplash.com/photo-1501820488136-72669149e0d4?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Cariñoso, interactivo",colors:["Todos"],care:"Baños semanales."},
-  {id:"lykoi",name:"Lykoi",nameEng:"Lykoi",origin:"EE.UU",type:"pelo-corto",tags:["exotico"],desc:"El gato lobo. Pelaje parcial, aspecto licántropo. Cariñosos y leales.",history:"Mutación natural de 2010.",temperament:"Leales como perros.",img:"https://images.unsplash.com/photo-1577023311546-cdc07a8454d5?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Leal, inteligente",colors:["Negro roano"],care:"Cuidados de piel."},
-  {id:"selkirk-rex",name:"Selkirk Rex",nameEng:"Selkirk Rex",origin:"EE.UU",type:"pelo-largo",desc:"El gato con permanente. Pelaje rizado, robusto y paciente.",history:"Montana, 1987.",temperament:"Extremadamente pacientes.",img:"https://images.unsplash.com/photo-1606214174790-dd4a9a1b0e7b?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"12-16 años",personality:"Paciente, tolerante",colors:["Todos"],care:"Cepillado bisemanal."},
-  {id:"tonkines",name:"Tonkinés",nameEng:"Tonkinese",origin:"Canadá",type:"pelo-corto",desc:"Equilibrio Siamés + Burmés. Juguetón con elegancia.",history:"Creados en los 60.",temperament:"Juguetones, interactivos.",img:"https://images.unsplash.com/photo-1592194996308-7b43878e84a0?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-16 años",personality:"Juguetón, interactivo",colors:["Mink","Champán","Platino","Azul"],care:"Cepillado semanal."},
-  {id:"khao-manee",name:"Khao Manee",nameEng:"Khao Manee",origin:"Tailandia",type:"pelo-corto",desc:"Gato Ojo de Diamante. Blanco puro, ojos azules o dorados. Rarísimo.",history:"Reservado a la realeza tailandesa.",temperament:"Curiosos, inteligentes.",img:"https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"14-18 años",personality:"Curioso, joya",colors:["Blanco puro"],care:"Proteger del sol."},
-  {id:"cymric",name:"Cymric",nameEng:"Cymric",origin:"Isla de Man",type:"pelo-largo",desc:"Manx pelilargo sin cola. Redondeado, inteligente, juguetón.",history:"Mutación de Isla de Man.",temperament:"Juguetones, buscan objetos.",img:"https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=800&h=600&fit=crop",weight:"4-6 kg",lifespan:"12-15 años",personality:"Juguetón, leal",colors:["Todos"],care:"Cepillado frecuente."},
-  {id:"korat",name:"Korat",nameEng:"Korat",origin:"Tailandia",type:"pelo-corto",desc:"Gato de la buena suerte. Azul plateado, ojos verdes esmeralda.",history:"Manuscritos tailandeses del siglo XIV.",temperament:"Cariñosos, inteligentes.",img:"https://images.unsplash.com/photo-1597626133663-53dfddb9446c?w=800&h=600&fit=crop",weight:"3-4.5 kg",lifespan:"12-16 años",personality:"Cariñoso, suerte",colors:["Azul plateado"],care:"Cepillado semanal."},
-  {id:"singapura",name:"Singapura",nameEng:"Singapura",origin:"Singapur",type:"pelo-corto",desc:"La raza más pequeña del mundo. Diminuto, ojos enormes.",history:"Gatos callejeros de Singapur, años 70.",temperament:"Extrovertidos, curiosos.",img:"https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=800&h=600&fit=crop",weight:"2-3 kg",lifespan:"12-15 años",personality:"Diminuto, curioso",colors:["Sepia agouti"],care:"Cepillado semanal."},
-  {id:"laperm",name:"LaPerm",nameEng:"LaPerm",origin:"EE.UU",type:"pelo-largo",desc:"Gato de pelaje rizado natural. Nacen calvos, desarrollan rizos.",history:"Mutación en Oregón, 1982.",temperament:"Cariñosos, juguetones.",img:"https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Cariñoso, rizado",colors:["Todos"],care:"Cepillado ligero."},
-  {id:"savannah",name:"Savannah",nameEng:"Savannah",origin:"EE.UU (híbrido)",type:"pelo-corto",tags:["gigante","exotico"],desc:"Híbrido de serval africano. La raza doméstica más alta. Atléticos, inteligentes y leales como perros.",history:"Primer cruce exitoso en 1986 con un serval africano.",temperament:"Atléticos, leales, muy inteligentes. Necesitan espacio.",img:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=800&h=600&fit=crop",weight:"6-12 kg",lifespan:"12-20 años",personality:"Atlético, leal, salvaje",colors:["Dorado spotted","Plateado","Negro"],care:"Ejercicio intenso. Alimentación de alta calidad."},
-  {id:"oriental",name:"Oriental",nameEng:"Oriental Shorthair",origin:"Reino Unido",type:"pelo-corto",desc:"Versión multicolor del Siamés. Más de 300 variedades de color. Extrovertidos y vocales.",history:"Desarrollados cruzando Siameses con otras razas.",temperament:"Extrovertidos, vocales, cariñosos. Demandan atención.",img:"https://images.unsplash.com/photo-1592194996308-7b43878e84a0?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Extrovertido, vocal",colors:["+300 variedades"],care:"Cepillado semanal."},
-  {id:"manx",name:"Manx",nameEng:"Manx",origin:"Isla de Man",type:"pelo-corto",desc:"El gato sin cola. Robusto, redondeado, excelente cazador. Personalidad casi canina.",history:"Raza natural de la Isla de Man. Mutación genética eliminó la cola.",temperament:"Juguetones, inteligentes, leales.",img:"https://cataas.com/cat?width=800&height=600&random=96",weight:"3.5-5.5 kg",lifespan:"12-16 años",personality:"Juguetón, leal",colors:["Todos"],care:"Cepillado semanal."}
-];
-
-// ============ STATE ============
-let currentFilter = 'all';
-let searchQuery = '';
-
-// ============ RENDER ============
-function renderBreeds() {
-  var grid = document.getElementById('breedsGrid');
-  var noResults = document.getElementById('noResults');
-  var filtered = breeds;
-
-  if (currentFilter !== 'all') {
-    filtered = filtered.filter(function(b) {
-      if (currentFilter === 'gigante') return b.tags && b.tags.indexOf('gigante') !== -1;
-      if (currentFilter === 'exotico') return b.tags && b.tags.indexOf('exotico') !== -1;
-      return b.type === currentFilter;
-    });
-  }
-
-  if (searchQuery.trim()) {
-    var q = searchQuery.toLowerCase().trim();
-    filtered = filtered.filter(function(b) {
-      return b.name.toLowerCase().indexOf(q) !== -1 ||
-             (b.nameEng && b.nameEng.toLowerCase().indexOf(q) !== -1) ||
-             b.origin.toLowerCase().indexOf(q) !== -1 ||
-             b.desc.toLowerCase().indexOf(q) !== -1;
-    });
+     1|<!DOCTYPE html>
+     2|<html lang="es">
+     3|<head>
+     4|<meta charset="UTF-8">
+     5|<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6|<title>Catopedia — Razas de Gatos</title>
+     7|<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+     8|<style>
+     9|* { margin: 0; padding: 0; box-sizing: border-box; }
+    10|body { background: #080013; color: #e8e0ff; font-family: 'Inter', sans-serif; }
+    11|.hero { background: linear-gradient(135deg, #0d0020 0%, #1a0040 100%); padding: 40px 20px; text-align: center; border-bottom: 1px solid rgba(0,212,255,0.2); }
+    12|.hero h1 { font-family: 'Playfair Display', serif; font-size: 3em; color: #00d4ff; text-shadow: 0 0 20px rgba(0,212,255,0.3); }
+    13|.hero p { color: #6b5b8a; margin-top: 8px; }
+    14|.stats { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+    15|.stat { text-align: center; }
+    16|.stat-num { font-size: 2em; font-weight: 700; color: #00d4ff; }
+    17|.stat-label { font-size: 0.8em; color: #6b5b8a; display: block; }
+    18|.filters { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
+    19|.chip { padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(0,212,255,0.2); background: rgba(0,212,255,0.05); color: #6b5b8a; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+    20|.chip.active { background: rgba(0,212,255,0.15); border-color: rgba(0,212,255,0.5); color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+    21|.search-wrap { text-align: center; padding: 0 20px 20px; }
+    22|.search-input { width: 100%; max-width: 400px; padding: 12px 20px; border-radius: 25px; border: 1px solid rgba(0,212,255,0.2); background: rgba(0,212,255,0.05); color: #e8e0ff; font-size: 0.9em; outline: none; }
+    23|.search-input:focus { border-color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.15); }
+    24|.search-input::placeholder { color: #6b5b8a; }
+    25|.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+    26|.card { background: rgba(13,0,32,0.8); border: 1px solid rgba(0,212,255,0.1); border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
+    27|.card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,212,255,0.1); }
+    28|.card-img { height: 200px; overflow: hidden; position: relative; }
+    29|.card-img img { width: 100%; height: 100%; object-fit: cover; }
+    30|.card-badge { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border-radius: 12px; font-size: 0.7em; font-weight: 600; }
+    31|.badge-corto { background: rgba(0,212,255,0.2); color: #00d4ff; }
+    32|.badge-largo { background: rgba(123,0,255,0.2); color: #b080ff; }
+    33|.badge-semi { background: rgba(255,179,71,0.2); color: #ffb347; }
+    34|.badge-sin { background: rgba(255,68,102,0.2); color: #ff6688; }
+    35|.badge-gigante { background: rgba(0,255,136,0.2); color: #00ff88; }
+    36|.badge-exotico { background: rgba(255,21,208,0.2); color: #ff40f0; }
+    37|.card-body { padding: 16px; }
+    38|.card-body h3 { font-size: 1.1em; color: #e8e0ff; margin-bottom: 4px; }
+    39|.card-origin { font-size: 0.8em; color: #6b5b8a; margin-bottom: 8px; }
+    40|.card-desc { font-size: 0.85em; color: #8b7baa; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    41|.card-stats { display: flex; gap: 15px; margin-top: 12px; }
+    42|.card-stat-val { font-weight: 600; font-size: 0.85em; color: #00d4ff; }
+    43|.card-stat-label { font-size: 0.7em; color: #6b5b8a; display: block; }
+    44|.no-results { text-align: center; padding: 60px 20px; color: #6b5b8a; display: none; }
+    45|/* Modal */
+    46|.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    47|.modal-overlay.active { opacity: 1; pointer-events: auto; }
+    48|.modal { background: #0d0020; border: 1px solid rgba(0,212,255,0.2); border-radius: 20px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; }
+    49|.modal-img { width: 100%; height: 250px; object-fit: cover; }
+    50|.modal-body { padding: 20px; }
+    51|.modal-body h2 { color: #00d4ff; font-size: 1.4em; margin-bottom: 4px; }
+    52|.modal-body h3 { color: #b080ff; font-size: 1em; margin: 16px 0 8px; }
+    53|.modal-body p { color: #8b7baa; font-size: 0.9em; line-height: 1.5; }
+    54|.modal-close { position: absolute; top: 10px; right: 20px; font-size: 2em; color: #6b5b8a; cursor: pointer; background: none; border: none; }
+    55|.modal-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+    56|.modal-stat { background: rgba(0,212,255,0.05); border-radius: 12px; padding: 12px; text-align: center; }
+    57|.modal-stat .val { font-size: 1.1em; font-weight: 600; color: #00d4ff; }
+    58|.modal-stat .lbl { font-size: 0.7em; color: #6b5b8a; margin-top: 2px; }
+    59|@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .hero h1 { font-size: 2em; } }
+    60|</style>
+    61|</head>
+    62|<body>
+    63|
+    64|<div class="hero">
+    65|  <h1>🐱 Catopedia</h1>
+    66|  <p>Enciclopedia de razas felinas • <span id="breedCount">0</span> razas</p>
+    67|  <div class="stats">
+    68|    <div class="stat"><span class="stat-num" id="totalCount">0</span><span class="stat-label">Razas</span></div>
+    69|    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Bigotes</span></div>
+    70|  </div>
+    71|</div>
+    72|
+    73|<div class="filters">
+    74|  <span class="chip active" data-filter="all">Todas</span>
+    75|  <span class="chip" data-filter="pelo-corto">Pelo Corto</span>
+    76|  <span class="chip" data-filter="pelo-largo">Pelo Largo</span>
+    77|  <span class="chip" data-filter="pelo-semilargo">Pelo Semilargo</span>
+    78|  <span class="chip" data-filter="sin-pelo">Sin Pelo</span>
+    79|  <span class="chip" data-filter="gigante">Gigantes</span>
+    80|  <span class="chip" data-filter="exotico">Exóticos</span>
+    81|</div>
+    82|
+    83|<div class="search-wrap">
+    84|  <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar por nombre, origen o descripción...">
+    85|</div>
+    86|
+    87|<div class="grid" id="breedsGrid"></div>
+    88|<div class="no-results" id="noResults">😿 No se encontraron razas con ese filtro. Prueba otra búsqueda.</div>
+    89|
+    90|<div class="modal-overlay" id="modalOverlay">
+    91|  <div class="modal" id="modalContent"></div>
+    92|</div>
+    93|
+    94|<script>
+    95|// ============ DATA ============
+    96|const breeds = [
+    97|  {id:"siames",name:"Siamés",nameEng:"Siamese",origin:"Tailandia",type:"pelo-corto",desc:"Una de las razas más antiguas. Vocales, inteligentes y leales. Famosos por su patrón colorpoint y ojos azules.",history:"Originarios de Siam, eran gatos sagrados en templos budistas. Llegaron a Occidente en el siglo XIX.",temperament:"Extremadamente sociables y vocales. Forman vínculos muy fuertes.",img:"https://images.unsplash.com/photo-1611915387289-08be07d7ce0d?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-20 años",personality:"Vocal, cariñoso, inteligente",colors:["Seal point","Blue point","Chocolate point","Lilac point"],care:"Cepillado semanal. Propensos a problemas respiratorios."},
+    98|  {id:"persa",name:"Persa",nameEng:"Persian",origin:"Irán (Persia)",type:"pelo-largo",desc:"El epítome del lujo felino. Rostro plano, pelaje exuberante y temperamento tranquilo. Perfectos para hogares silenciosos.",history:"Llegaron a Europa desde Persia en el siglo XVII. La reina Victoria fue una gran admiradora.",temperament:"Tranquilos, dulces y algo distantes. Prefieren ambientes serenos.",img:"https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&h=600&fit=crop",weight:"3.5-7 kg",lifespan:"12-17 años",personality:"Tranquilo, dulce, majestuoso",colors:["Blanco","Negro","Azul","Crema","Chocolate","Bicolor"],care:"Cepillado DIARIO. Limpieza ocular frecuente."},
+    99|  {id:"maine-coon",name:"Maine Coon",nameEng:"Maine Coon",origin:"EE.UU (Maine)",type:"pelo-largo",tags:["gigante"],desc:"El gigante gentil. La raza doméstica más grande, superando los 10 kg. Amigables, juguetones y cariñosos.",history:"Raza natural del estado de Maine. La leyenda dice que descienden de gatos de María Antonieta.",temperament:"Juguetones, inteligentes y familiares. Les encanta el agua.",img:"https://images.unsplash.com/photo-1600800634599-33c45ac98d48?w=800&h=600&fit=crop",weight:"5-11 kg",lifespan:"12-15 años",personality:"Gentil, juguetón, familiar",colors:["Marrón tabby","Negro","Blanco","Rojo","Plateado"],care:"Cepillado 2-3 veces/semana. Necesitan espacio."},
+   100|  {id:"bengali",name:"Bengalí",nameEng:"Bengal",origin:"EE.UU (híbrido)",type:"pelo-corto",tags:["exotico"],desc:"Un leopardo en miniatura. Pelaje moteado espectacular, energía infinita e inteligencia superior.",history:"Híbrido creado cruzando gatos domésticos con el leopardo asiático en los años 60.",temperament:"Extremadamente activos, curiosos y atléticos. Necesitan estimulación constante.",img:"https://images.unsplash.com/photo-1591946614720-90e1a156f8da?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"12-16 años",personality:"Energético, inteligente, salvaje",colors:["Marrón spotted","Nieve","Plateado","Carbon"],care:"Cepillado semanal. ALTA demanda de ejercicio."},
+   101|  {id:"sphynx",name:"Sphynx",nameEng:"Sphynx",origin:"Canadá",type:"sin-pelo",tags:["exotico"],desc:"El gato sin pelo más famoso. Piel cálida como gamuza, enormes orejas y personalidad payasa.",history:"Mutación natural aparecida en Toronto en 1966.",temperament:"Extremadamente sociables y dependientes. Buscan calor constantemente.",img:"https://images.unsplash.com/photo-1606214174790-dd4a9a1b0e7b?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Sociable, payaso, cálido",colors:["Todos los colores"],care:"Baños semanales. Proteger del frío y del sol."},
+   102|  {id:"british-shorthair",name:"Británico Pelo Corto",nameEng:"British Shorthair",origin:"Reino Unido",type:"pelo-corto",desc:"El osito de peluche felino. Robusto, tranquilo, pelaje denso y afelpado. Mirada dulce y expresión sonriente.",history:"Descendientes de gatos romanos. Casi extinguidos en guerras mundiales.",temperament:"Tranquilos, reservados pero cariñosos. Rara vez maúllan.",img:"https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop",weight:"4-8 kg",lifespan:"14-20 años",personality:"Tranquilo, leal, independiente",colors:["Azul","Lila","Chocolate","Crema","Blanco","Negro"],care:"Cepillado semanal. Tendencia a obesidad."},
+   103|  {id:"ragdoll",name:"Ragdoll",nameEng:"Ragdoll",origin:"EE.UU",type:"pelo-largo",desc:"Famosos por relajarse como muñecos de trapo al ser cargados. Grandes, dóciles y extremadamente cariñosos.",history:"Creados en California en los 60. Rápidamente se volvieron populares por su temperamento.",temperament:"Dóciles, relajados, cariñosos. Ideales para familias.",img:"https://images.unsplash.com/photo-1501820488136-72669149e0d4?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"12-17 años",personality:"Dócil, cariñoso, relajado",colors:["Seal point","Blue point","Chocolate","Lila","Crema"],care:"Cepillado 2-3 veces/semana. Propensos a obesidad."},
+   104|  {id:"scottish-fold",name:"Scottish Fold",nameEng:"Scottish Fold",origin:"Escocia",type:"pelo-corto",desc:"Inconfundibles por sus orejas plegadas hacia adelante. Dulces, tranquilos y con una mirada que derrite corazones.",history:"El primer Scottish Fold nació en una granja escocesa en 1961.",temperament:"Dulces, tranquilos y muy apegados. Se adaptan bien a cualquier hogar.",img:"https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=800&h=600&fit=crop",weight:"3-6 kg",lifespan:"12-15 años",personality:"Dulce, tranquilo, único",colors:["Todos los colores"],care:"Cepillado semanal. Revisar orejas regularmente."},
+   105|  {id:"abisinio",name:"Abisinio",nameEng:"Abyssinian",origin:"Etiopía/Abisinia",type:"pelo-corto",desc:"Una de las razas más antiguas. Pelaje ticked único, cuerpo atlético y curiosidad infinita. Siempre en movimiento.",history:"Posiblemente descendientes de los gatos del Antiguo Egipto.",temperament:"Curiosos, activos, inteligentes. No son gatos falderos.",img:"https://images.unsplash.com/photo-1536590158209-e9d317d0c16f?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Curioso, activo, inteligente",colors:["Ruddy","Rojo","Azul","Fawn"],care:"Cepillado semanal. Necesitan estimulación."},
+   106|  {id:"noruego-bosque",name:"Bosque de Noruega",nameEng:"Norwegian Forest",origin:"Noruega",type:"pelo-largo",tags:["gigante"],desc:"El gato vikingo. Robusto, pelaje impermeable y cola tupida. Adaptado a los duros inviernos nórdicos.",history:"Raza natural noruega. Mencionados en la mitología nórdica.",temperament:"Independientes pero cariñosos. Buenos cazadores.",img:"https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"14-16 años",personality:"Independiente, cariñoso, vikingo",colors:["Todos los colores"],care:"Cepillado bisemanal. Muda intensa en primavera."},
+   107|  {id:"azul-ruso",name:"Azul Ruso",nameEng:"Russian Blue",origin:"Rusia",type:"pelo-corto",desc:"Elegancia plateada. Doble pelaje azul con puntas brillantes y ojos verde esmeralda. Tímidos con extraños, muy leales.",history:"Originarios del puerto de Arcángel. Llevados a Inglaterra por marineros.",temperament:"Tímidos con extraños, muy leales y cariñosos con su familia.",img:"https://images.unsplash.com/photo-1597626133663-53dfddb9446c?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"15-20 años",personality:"Leal, tímido, elegante",colors:["Azul plateado"],care:"Cepillado semanal. Muy sanos."},
+   108|  {id:"siberiano",name:"Siberiano",nameEng:"Siberian",origin:"Rusia (Siberia)",type:"pelo-largo",tags:["gigante","hipoalergenico"],desc:"Gato nacional ruso. Triple pelaje impermeable. Producen menos proteína Fel d1, tolerables para alérgicos.",history:"Raza natural de bosques siberianos con más de 1000 años.",temperament:"Juguetones, inteligentes, valientes. Les fascina el agua.",img:"https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=800&h=600&fit=crop",weight:"5-9 kg",lifespan:"12-18 años",personality:"Valiente, juguetón, hipoalergénico",colors:["Marrón tabby","Azul","Rojo","Plata","Blanco"],care:"Cepillado bisemanal. Muda estacional."},
+   109|  {id:"bombay",name:"Bombay",nameEng:"Bombay",origin:"EE.UU",type:"pelo-corto",desc:"La pantera en miniatura. Negro azabache, ojos dorados, pelaje satinado. Parece salvaje, es puro terciopelo.",history:"Creados en Kentucky cruzando Burmeses con Americanos negro.",temperament:"Sociables, cariñosos. Odian estar solos.",img:"https://images.unsplash.com/photo-1595429035839-c99c298ffd73?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-18 años",personality:"Sociable, cariñoso, pantera",colors:["Negro azabache"],care:"Cepillado semanal."},
+   110|  {id:"somali",name:"Somalí",nameEng:"Somali",origin:"EE.UU",type:"pelo-semilargo",desc:"El zorro felino. Abisinios de pelo largo, cola tupida. Hiperactivos, inteligentes y curiosos.",history:"Aparecieron en camadas de Abisinios en los años 40.",temperament:"Hiperactivos, curiosos, acróbatas natos.",img:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=800&h=600&fit=crop",weight:"3.5-5 kg",lifespan:"12-16 años",personality:"Activo, inteligente, acróbata",colors:["Ruddy","Rojo","Azul","Fawn"],care:"Cepillado bisemanal."},
+   111|  {id:"devon-rex",name:"Devon Rex",nameEng:"Devon Rex",origin:"Reino Unido",type:"pelo-corto",desc:"El gato duende. Orejas enormes, cara élfica y pelaje rizado. Traviesos e inteligentes.",history:"Descubiertos en mina de Devon en 1960.",temperament:"Extremadamente sociables y traviesos.",img:"https://images.unsplash.com/photo-1591946614720-90e1a156f8da?w=800&h=600&fit=crop",weight:"2.5-4 kg",lifespan:"10-15 años",personality:"Travieso, inteligente, duende",colors:["Todos"],care:"Limpieza con gamuza."},
+   112|  {id:"ocicat",name:"Ocicat",nameEng:"Ocicat",origin:"EE.UU",type:"pelo-corto",desc:"Parece salvaje pero es 100% doméstico. Pelaje moteado como ocelote. Atlético y sociable.",history:"Creado accidentalmente en 1964.",temperament:"Extrovertidos, se adaptan a todo.",img:"https://images.unsplash.com/photo-1602265587623-e2189d637a76?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"15-18 años",personality:"Sociable, atlético",colors:["Tawny","Chocolate","Canela","Azul","Lavanda"],care:"Cepillado semanal."},
+   113|  {id:"chartreux",name:"Chartreux",nameEng:"Chartreux",origin:"Francia",type:"pelo-corto",desc:"El gato sonriente francés. Robusto, azul grisáceo, ojos cobrizos. Silencioso y observador.",history:"Criados por monjes cartujos desde el siglo XVIII.",temperament:"Silenciosos, observadores, muy inteligentes.",img:"https://images.unsplash.com/photo-1536590158209-e9d317d0c16f?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"13-16 años",personality:"Silencioso, observador",colors:["Azul grisáceo"],care:"Cepillado semanal."},
+   114|  {id:"bobtail-japones",name:"Bobtail Japonés",nameEng:"Japanese Bobtail",origin:"Japón",type:"pelo-corto",desc:"El Maneki Neko de la suerte. Cola como pompón. Activos, inteligentes y muy habladores.",history:"Más de 1000 años en Japón. Símbolo de fortuna.",temperament:"Muy vocales, activos y sociales.",img:"https://images.unsplash.com/photo-1571566882372-1598d88abd90?w=800&h=600&fit=crop",weight:"2.5-4.5 kg",lifespan:"15-18 años",personality:"Vocal, activo, suerte",colors:["Calicó","Blanco y negro","Tortuga"],care:"Cepillado semanal. Muy sanos."},
+   115|  {id:"burmilla",name:"Burmilla",nameEng:"Burmilla",origin:"Reino Unido",type:"pelo-corto",desc:"Mezcla Burmés + Chinchilla Persa. Plateado sombreado, ojos verdes. Dulce y juguetón.",history:"Romance accidental en 1981.",temperament:"Dulces, juguetones, ronronean constantemente.",img:"https://images.unsplash.com/photo-1611915387289-08be07d7ce0d?w=800&h=600&fit=crop",weight:"3-6 kg",lifespan:"12-16 años",personality:"Dulce, juguetón",colors:["Plata","Dorado","Crema"],care:"Cepillado semanal."},
+   116|  {id:"peterbald",name:"Peterbald",nameEng:"Peterbald",origin:"Rusia",type:"sin-pelo",tags:["exotico"],desc:"Elegante gato sin pelo de San Petersburgo. Varios grados de calvicie. Muy cariñoso.",history:"Creado en 1994 en San Petersburgo.",temperament:"Muy cariñosos e interactivos.",img:"https://images.unsplash.com/photo-1501820488136-72669149e0d4?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Cariñoso, interactivo",colors:["Todos"],care:"Baños semanales."},
+   117|  {id:"lykoi",name:"Lykoi",nameEng:"Lykoi",origin:"EE.UU",type:"pelo-corto",tags:["exotico"],desc:"El gato lobo. Pelaje parcial, aspecto licántropo. Cariñosos y leales.",history:"Mutación natural de 2010.",temperament:"Leales como perros.",img:"https://images.unsplash.com/photo-1577023311546-cdc07a8454d5?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Leal, inteligente",colors:["Negro roano"],care:"Cuidados de piel."},
+   118|  {id:"selkirk-rex",name:"Selkirk Rex",nameEng:"Selkirk Rex",origin:"EE.UU",type:"pelo-largo",desc:"El gato con permanente. Pelaje rizado, robusto y paciente.",history:"Montana, 1987.",temperament:"Extremadamente pacientes.",img:"https://images.unsplash.com/photo-1606214174790-dd4a9a1b0e7b?w=800&h=600&fit=crop",weight:"4-7 kg",lifespan:"12-16 años",personality:"Paciente, tolerante",colors:["Todos"],care:"Cepillado bisemanal."},
+   119|  {id:"tonkines",name:"Tonkinés",nameEng:"Tonkinese",origin:"Canadá",type:"pelo-corto",desc:"Equilibrio Siamés + Burmés. Juguetón con elegancia.",history:"Creados en los 60.",temperament:"Juguetones, interactivos.",img:"https://images.unsplash.com/photo-1592194996308-7b43878e84a0?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-16 años",personality:"Juguetón, interactivo",colors:["Mink","Champán","Platino","Azul"],care:"Cepillado semanal."},
+   120|  {id:"khao-manee",name:"Khao Manee",nameEng:"Khao Manee",origin:"Tailandia",type:"pelo-corto",desc:"Gato Ojo de Diamante. Blanco puro, ojos azules o dorados. Rarísimo.",history:"Reservado a la realeza tailandesa.",temperament:"Curiosos, inteligentes.",img:"https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"14-18 años",personality:"Curioso, joya",colors:["Blanco puro"],care:"Proteger del sol."},
+   121|  {id:"cymric",name:"Cymric",nameEng:"Cymric",origin:"Isla de Man",type:"pelo-largo",desc:"Manx pelilargo sin cola. Redondeado, inteligente, juguetón.",history:"Mutación de Isla de Man.",temperament:"Juguetones, buscan objetos.",img:"https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=800&h=600&fit=crop",weight:"4-6 kg",lifespan:"12-15 años",personality:"Juguetón, leal",colors:["Todos"],care:"Cepillado frecuente."},
+   122|  {id:"korat",name:"Korat",nameEng:"Korat",origin:"Tailandia",type:"pelo-corto",desc:"Gato de la buena suerte. Azul plateado, ojos verdes esmeralda.",history:"Manuscritos tailandeses del siglo XIV.",temperament:"Cariñosos, inteligentes.",img:"https://images.unsplash.com/photo-1597626133663-53dfddb9446c?w=800&h=600&fit=crop",weight:"3-4.5 kg",lifespan:"12-16 años",personality:"Cariñoso, suerte",colors:["Azul plateado"],care:"Cepillado semanal."},
+   123|  {id:"singapura",name:"Singapura",nameEng:"Singapura",origin:"Singapur",type:"pelo-corto",desc:"La raza más pequeña del mundo. Diminuto, ojos enormes.",history:"Gatos callejeros de Singapur, años 70.",temperament:"Extrovertidos, curiosos.",img:"https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=800&h=600&fit=crop",weight:"2-3 kg",lifespan:"12-15 años",personality:"Diminuto, curioso",colors:["Sepia agouti"],care:"Cepillado semanal."},
+   124|  {id:"laperm",name:"LaPerm",nameEng:"LaPerm",origin:"EE.UU",type:"pelo-largo",desc:"Gato de pelaje rizado natural. Nacen calvos, desarrollan rizos.",history:"Mutación en Oregón, 1982.",temperament:"Cariñosos, juguetones.",img:"https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Cariñoso, rizado",colors:["Todos"],care:"Cepillado ligero."},
+   125|  {id:"savannah",name:"Savannah",nameEng:"Savannah",origin:"EE.UU (híbrido)",type:"pelo-corto",tags:["gigante","exotico"],desc:"Híbrido de serval africano. La raza doméstica más alta. Atléticos, inteligentes y leales como perros.",history:"Primer cruce exitoso en 1986 con un serval africano.",temperament:"Atléticos, leales, muy inteligentes. Necesitan espacio.",img:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=800&h=600&fit=crop",weight:"6-12 kg",lifespan:"12-20 años",personality:"Atlético, leal, salvaje",colors:["Dorado spotted","Plateado","Negro"],care:"Ejercicio intenso. Alimentación de alta calidad."},
+   126|  {id:"oriental",name:"Oriental",nameEng:"Oriental Shorthair",origin:"Reino Unido",type:"pelo-corto",desc:"Versión multicolor del Siamés. Más de 300 variedades de color. Extrovertidos y vocales.",history:"Desarrollados cruzando Siameses con otras razas.",temperament:"Extrovertidos, vocales, cariñosos. Demandan atención.",img:"https://images.unsplash.com/photo-1592194996308-7b43878e84a0?w=800&h=600&fit=crop",weight:"3-5 kg",lifespan:"12-15 años",personality:"Extrovertido, vocal",colors:["+300 variedades"],care:"Cepillado semanal."},
+   127|  {id:"manx",name:"Manx",nameEng:"Manx",origin:"Isla de Man",type:"pelo-corto",desc:"El gato sin cola. Robusto, redondeado, excelente cazador. Personalidad casi canina.",history:"Raza natural de la Isla de Man. Mutación genética eliminó la cola.",temperament:"Juguetones, inteligentes, leales.",img:"https://cataas.com/cat?width=800&height=600&random=96",weight:"3.5-5.5 kg",lifespan:"12-16 años",personality:"Juguetón, leal",colors:["Todos"],care:"Cepillado semanal."}
+   128|];
+   129|
+   130|// ============ STATE ============
+   131|let currentFilter = 'all';
+   132|let searchQuery = '';
+   133|
+   134|// ============ RENDER ============
+   135|function renderBreeds() {
+   136|  var grid = document.getElementById('breedsGrid');
+   137|  var noResults = document.getElementById('noResults');
+   138|  var filtered = breeds;
+   139|
+   140|  if (currentFilter !== 'all') {
+   141|    filtered = filtered.filter(function(b) {
+   142|      if (currentFilter === 'gigante') return b.tags && b.tags.indexOf('gigante') !== -1;
+   143|      if (currentFilter === 'exotico') return b.tags && b.tags.indexOf('exotico') !== -1;
+   144|      return b.type === currentFilter;
+   145|    });
+   146|  }
+   147|
+   148|  if (searchQuery.trim()) {
+   149|    var q = searchQuery.toLowerCase().trim();
+   150|    filtered = filtered.filter(function(b) {
+   151|      return b.name.toLowerCase().indexOf(q) !== -1 ||
+   152|             (b.nameEng && b.nameEng.toLowerCase().indexOf(q) !== -1) ||
+   153|             b.origin.toLowerCase().indexOf(q) !== -1 ||
+   154|             b.desc.toLowerCase().indexOf(q) !== -1;
+   155|    });
   }
 
   document.getElementById('breedCount').textContent = filtered.length;
   document.getElementById('totalCount').textContent = filtered.length;
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '';
-    noResults.style.display = 'block';
-    return;
-  }
-
-  noResults.style.display = 'none';
-  
-  grid.innerHTML = filtered.map(function(b) {
-    var badgeClass = '';
-    var badgeText = '';
-    if (b.tags && b.tags.indexOf('gigante') !== -1) { badgeClass = 'badge-gigante'; badgeText = 'Gigante'; }
-    else if (b.tags && b.tags.indexOf('exotico') !== -1) { badgeClass = 'badge-exotico'; badgeText = 'Exótico'; }
-    else if (b.type === 'pelo-corto') { badgeClass = 'badge-corto'; badgeText = 'Pelo Corto'; }
-    else if (b.type === 'pelo-largo') { badgeClass = 'badge-largo'; badgeText = 'Pelo Largo'; }
-    else if (b.type === 'pelo-semilargo') { badgeClass = 'badge-semi'; badgeText = 'Pelo Semilargo'; }
-    else if (b.type === 'sin-pelo') { badgeClass = 'badge-sin'; badgeText = 'Sin Pelo'; }
-
-    return '<div class="card" onclick="openBreed('' + b.id + '')">' +
-      '<div class="card-img">' +
-        '<img src="' + b.img + '" alt="' + b.name + '" loading="lazy" onerror="this.onerror=null;this.src='https://cataas.com/cat?width=800&height=600&random=' + Math.floor(Math.random()*999) + ''">' +
-        '<span class="card-badge ' + badgeClass + '">' + badgeText + '</span>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<h3>' + b.name + '</h3>' +
-        '<p class="card-origin">📍 ' + b.origin + '</p>' +
-        '<p class="card-desc">' + b.desc + '</p>' +
-        '<div class="card-stats">' +
-          '<div><span class="card-stat-val">' + b.weight + '</span><span class="card-stat-label">Peso</span></div>' +
-          '<div><span class="card-stat-val">' + b.lifespan + '</span><span class="card-stat-label">Vida</span></div>' +
-          '<div><span class="card-stat-val">' + (b.personality ? b.personality.split(',')[0] : '') + '</span><span class="card-stat-label">Personalidad</span></div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-// ============ MODAL ============
-function openBreed(id) {
-  var breed = null;
-  for (var i = 0; i < breeds.length; i++) {
-    if (breeds[i].id === id) { breed = breeds[i]; break; }
-  }
-  if (!breed) return;
-
-  var overlay = document.getElementById('modalOverlay');
-  var content = document.getElementById('modalContent');
-  
-  content.innerHTML = 
-    '<img src="' + breed.img + '" alt="' + breed.name + '" class="modal-img" onerror="this.onerror=null;this.src='https://cataas.com/cat?width=800&height=600&random=' + Math.floor(Math.random()*999) + ''">' +
-    '<div class="modal-body">' +
-      '<h2>' + breed.name + '</h2>' +
-      '<p style="color:#6b5b8a;margin-bottom:12px">' + breed.nameEng + ' • 📍 ' + breed.origin + '</p>' +
-      '<div class="modal-stats">' +
-        '<div class="modal-stat"><div class="val">' + breed.weight + '</div><div class="lbl">Peso</div></div>' +
-        '<div class="modal-stat"><div class="val">' + breed.lifespan + '</div><div class="lbl">Vida</div></div>' +
-        '<div class="modal-stat"><div class="val">' + breed.colors.length + '</div><div class="lbl">Variedades</div></div>' +
-      '</div>' +
-      '<h3>📖 Descripción</h3><p>' + breed.desc + '</p>' +
-      '<h3>📜 Historia</h3><p>' + breed.history + '</p>' +
-      '<h3>🧠 Temperamento</h3><p>' + breed.temperament + '</p>' +
-      '<h3>🎨 Colores</h3><p>' + breed.colors.join(', ') + '</p>' +
-      '<h3>🏥 Cuidados</h3><p>' + breed.care + '</p>' +
-    '</div>';
-
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeBreed() {
-  document.getElementById('modalOverlay').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// Keyboard escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeBreed();
-});
-
-// Close on overlay click
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeBreed();
-});
-
-// ============ FILTERS ============
-var chips = document.querySelectorAll('.chip');
-for (var i = 0; i < chips.length; i++) {
-  chips[i].addEventListener('click', function() {
-    for (var j = 0; j < chips.length; j++) chips[j].classList.remove('active');
-    this.classList.add('active');
-    currentFilter = this.dataset.filter;
-    renderBreeds();
-  });
-}
-
-// ============ SEARCH ============
-var searchEl = document.getElementById('searchInput');
-if (searchEl) {
-  searchEl.addEventListener('input', function(e) {
-    searchQuery = e.target.value;
-    renderBreeds();
-  });
-}
-
+   160|
+   161|  if (filtered.length === 0) {
+   162|    grid.innerHTML = '';
+   163|    noResults.style.display = 'block';
+   164|    return;
+   165|  }
+   166|
+   167|  noResults.style.display = 'none';
+   168|  
+   169|  grid.innerHTML = filtered.map(function(b) {
+   170|    var badgeClass = '';
+   171|    var badgeText = '';
+   172|    if (b.tags && b.tags.indexOf('gigante') !== -1) { badgeClass = 'badge-gigante'; badgeText = 'Gigante'; }
+   173|    else if (b.tags && b.tags.indexOf('exotico') !== -1) { badgeClass = 'badge-exotico'; badgeText = 'Exótico'; }
+   174|    else if (b.type === 'pelo-corto') { badgeClass = 'badge-corto'; badgeText = 'Pelo Corto'; }
+   175|    else if (b.type === 'pelo-largo') { badgeClass = 'badge-largo'; badgeText = 'Pelo Largo'; }
+   176|    else if (b.type === 'pelo-semilargo') { badgeClass = 'badge-semi'; badgeText = 'Pelo Semilargo'; }
+   177|    else if (b.type === 'sin-pelo') { badgeClass = 'badge-sin'; badgeText = 'Sin Pelo'; }
+   178|
+   179|    return '<div class="card" onclick="openBreed('' + b.id + '')">' +
+   180|      '<div class="card-img">' +
+   181|        '<img src="' + b.img + '" alt="' + b.name + '" loading="lazy" onerror="this.onerror=null;this.src='https://cataas.com/cat?width=800&height=600&random=' + Math.floor(Math.random()*999) + ''">' +
+   182|        '<span class="card-badge ' + badgeClass + '">' + badgeText + '</span>' +
+   183|      '</div>' +
+   184|      '<div class="card-body">' +
+   185|        '<h3>' + b.name + '</h3>' +
+   186|        '<p class="card-origin">📍 ' + b.origin + '</p>' +
+   187|        '<p class="card-desc">' + b.desc + '</p>' +
+   188|        '<div class="card-stats">' +
+   189|          '<div><span class="card-stat-val">' + b.weight + '</span><span class="card-stat-label">Peso</span></div>' +
+   190|          '<div><span class="card-stat-val">' + b.lifespan + '</span><span class="card-stat-label">Vida</span></div>' +
+   191|          '<div><span class="card-stat-val">' + (b.personality ? b.personality.split(',')[0] : '') + '</span><span class="card-stat-label">Personalidad</span></div>' +
+   192|        '</div>' +
+   193|      '</div>' +
+   194|    '</div>';
+   195|  }).join('');
+   196|}
+   197|
+   198|// ============ MODAL ============
+   199|function openBreed(id) {
+   200|  var breed = null;
+   201|  for (var i = 0; i < breeds.length; i++) {
+   202|    if (breeds[i].id === id) { breed = breeds[i]; break; }
+   203|  }
+   204|  if (!breed) return;
+   205|
+   206|  var overlay = document.getElementById('modalOverlay');
+   207|  var content = document.getElementById('modalContent');
+   208|  
+   209|  content.innerHTML = 
+   210|    '<img src="' + breed.img + '" alt="' + breed.name + '" class="modal-img" onerror="this.onerror=null;this.src='https://cataas.com/cat?width=800&height=600&random=' + Math.floor(Math.random()*999) + ''">' +
+   211|    '<div class="modal-body">' +
+   212|      '<h2>' + breed.name + '</h2>' +
+   213|      '<p style="color:#6b5b8a;margin-bottom:12px">' + breed.nameEng + ' • 📍 ' + breed.origin + '</p>' +
+   214|      '<div class="modal-stats">' +
+   215|        '<div class="modal-stat"><div class="val">' + breed.weight + '</div><div class="lbl">Peso</div></div>' +
+   216|        '<div class="modal-stat"><div class="val">' + breed.lifespan + '</div><div class="lbl">Vida</div></div>' +
+   217|        '<div class="modal-stat"><div class="val">' + breed.colors.length + '</div><div class="lbl">Variedades</div></div>' +
+   218|      '</div>' +
+   219|      '<h3>📖 Descripción</h3><p>' + breed.desc + '</p>' +
+   220|      '<h3>📜 Historia</h3><p>' + breed.history + '</p>' +
+   221|      '<h3>🧠 Temperamento</h3><p>' + breed.temperament + '</p>' +
+   222|      '<h3>🎨 Colores</h3><p>' + breed.colors.join(', ') + '</p>' +
+   223|      '<h3>🏥 Cuidados</h3><p>' + breed.care + '</p>' +
+   224|    '</div>';
+   225|
+   226|  overlay.classList.add('active');
+   227|  document.body.style.overflow = 'hidden';
+   228|}
+   229|
+   230|function closeBreed() {
+   231|  document.getElementById('modalOverlay').classList.remove('active');
+   232|  document.body.style.overflow = '';
+   233|}
+   234|
+   235|// Keyboard escape
+   236|document.addEventListener('keydown', function(e) {
+   237|  if (e.key === 'Escape') closeBreed();
+   238|});
+   239|
+   240|// Close on overlay click
+   241|document.getElementById('modalOverlay').addEventListener('click', function(e) {
+   242|  if (e.target === this) closeBreed();
+   243|});
+   244|
+   245|// ============ FILTERS ============
+   246|var chips = document.querySelectorAll('.chip');
+   247|for (var i = 0; i < chips.length; i++) {
+   248|  chips[i].addEventListener('click', function() {
+   249|    for (var j = 0; j < chips.length; j++) chips[j].classList.remove('active');
+   250|    this.classList.add('active');
+   251|    currentFilter = this.dataset.filter;
+   252|    renderBreeds();
+   253|  });
+   254|}
+   255|
+   256|// ============ SEARCH ============
+   257|var searchEl = document.getElementById('searchInput');
+   258|if (searchEl) {
+   259|  searchEl.addEventListener('input', function(e) {
+   260|    searchQuery = e.target.value;
+   261|    renderBreeds();
+   262|  });
+   263|}
+   264|
 // ============ INIT ============
-renderBreeds();
-document.getElementById('breedCount').textContent = breeds.length;
-document.getElementById('totalCount').textContent = breeds.length;
-</script>
-
-</body>
-</html>
+function initCatopedia() {
+  renderBreeds();
+  var bc = document.getElementById('breedCount');
+  var tc = document.getElementById('totalCount');
+  if (bc) bc.textContent = breeds.length;
+  if (tc) tc.textContent = breeds.length;
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCatopedia);
+} else {
+  initCatopedia();
+}
+setTimeout(function() {
+  var grid = document.getElementById('breedsGrid');
+  if (grid && grid.children.length === 0) { initCatopedia(); }
+}, 500);
+   269|</script>
+   270|
+   271|</body>
+   272|</html>
