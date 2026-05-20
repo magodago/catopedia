@@ -270,15 +270,11 @@ function initCatopedia() {
   if (bc) bc.textContent = breeds.length;
   if (tc) tc.textContent = breeds.length;
 }
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCatopedia);
-} else {
-  initCatopedia();
-}
-setTimeout(function() {
-  var grid = document.getElementById('breedsGrid');
-  if (grid && grid.children.length === 0) { initCatopedia(); }
-}, 500);
+// Multiple init strategies for reliability
+if (document.readyState === 'complete') { initCatopedia(); }
+else { window.addEventListener('load', initCatopedia); }
+// Extra safety: run after a short delay regardless
+setTimeout(initCatopedia, 300);
    269|</script>
    270|
    271|</body>
