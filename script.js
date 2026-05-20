@@ -324,11 +324,83 @@
    324|    img: "https://cataas.com/cat?width=800&height=600&random=96",
    325|    weight: "3.5-5.5 kg",
    326|    lifespan: "12-16 años",
-   327|    personality: "Juguetón, leal, sin cola",
-   328|    colors: ["Todos los colores y patrones"],
-   329|    care: "Cepillado semanal. El gen sin cola puede causar problemas espinales (Síndrome de Manx). Cría ética importante."
-   330|  }
-   331|];
+    personality: "Juguetón, leal, sin cola",
+    colors: ["Todos los colores y patrones"],
+    care: "Cepillado semanal. El gen sin cola puede causar problemas espinales (Síndrome de Manx). Cría ética importante."
+  },
+  {
+    id: "british-shorthair", name: "Britanico de Pelo Corto", nameEng: "British Shorthair", origin: "Reino Unido", type: "pelo-corto",
+    desc: "El osito de peluche del mundo felino. Robustos, tranquilos y con expresion dulce. Pelaje denso y afelpado inconfundible.", history: "Descendientes de gatos romanos. Casi extinguidos en las guerras mundiales.", temperament: "Tranquilos, reservados con extranos pero carinosos con su familia. Rara vez maullan.", img: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop", weight: "4-8 kg", lifespan: "14-20 anos", personality: "Tranquilo, leal, independiente", colors: ["Azul","Lila","Chocolate","Crema","Blanco","Negro"], care: "Cepillado semanal. Tendencia a obesidad."
+  },
+  {
+    id: "siberiano", name: "Siberiano", nameEng: "Siberian", origin: "Rusia (Siberia)", type: "pelo-largo", tags: ["gigante","hipoalergenico"],
+    desc: "Gato nacional ruso. Poderoso, agil, triple pelaje impermeable. Produce menos proteina Fel d1: tolerable para muchos alergicos.", history: "Raza natural de los bosques siberianos con mas de 1000 anos de historia.", temperament: "Juguetones, inteligentes y valientes. Les fascina el agua. Muy afectuosos.", img: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=800&h=600&fit=crop", weight: "5-9 kg", lifespan: "12-18 anos", personality: "Valiente, jugueton, hipoalergenico", colors: ["Marron tabby","Azul","Rojo","Plata","Blanco","Carey"], care: "Cepillado bisemanal. Muda intensa en primavera."
+  },
+  {
+    id: "bombay-cat", name: "Bombay", nameEng: "Bombay", origin: "Estados Unidos", type: "pelo-corto",
+    desc: "La pantera en miniatura. Negro azabache con ojos dorados y pelaje satinado. Parece salvaje pero es puro terciopelo.", history: "Creados en Kentucky cruzando Burmeses con Americanos de pelo corto negro.", temperament: "Sociables, carinosos y muy apegados. Odian estar solos.", img: "https://images.unsplash.com/photo-1595429035839-c99c298ffd73?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "12-18 anos", personality: "Sociable, carinoso", colors: ["Negro azabache"], care: "Cepillado semanal."
+  },
+  {
+    id: "somali-cat", name: "Somali", nameEng: "Somali", origin: "Estados Unidos", type: "pelo-semilargo",
+    desc: "El zorro felino. Abisinios de pelo largo con cola tupida y pelaje ticked. Hiperactivos, inteligentes y curiosos.", history: "Aparecieron espontaneamente en camadas de Abisinios en los anos 40.", temperament: "Hiperactivos, curiosos y acrobatas natos.", img: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?w=800&h=600&fit=crop", weight: "3.5-5 kg", lifespan: "12-16 anos", personality: "Activo, inteligente, acrobata", colors: ["Ruddy","Rojo","Azul","Fawn"], care: "Cepillado bisemanal. Necesitan arboles altos."
+  },
+  {
+    id: "devon-rex-cat", name: "Devon Rex", nameEng: "Devon Rex", origin: "Reino Unido", type: "pelo-corto",
+    desc: "El gato duende. Orejas enormes, cara elfica y pelaje rizado suave. Traviesos, inteligentes.", history: "Descubiertos en una mina de Devon en 1960.", temperament: "Extremadamente sociables y traviesos.", img: "https://images.unsplash.com/photo-1591946614720-90e1a156f8da?w=800&h=600&fit=crop", weight: "2.5-4 kg", lifespan: "10-15 anos", personality: "Travieso, inteligente, duende", colors: ["Todos los colores"], care: "Limpieza con gamuza."
+  },
+  {
+    id: "ocicat-cat", name: "Ocicat", nameEng: "Ocicat", origin: "Estados Unidos", type: "pelo-corto",
+    desc: "Parece salvaje pero es 100% domestico. Pelaje moteado como ocelote. Atletico, inteligente y sociable.", history: "Creado accidentalmente en 1964. Sin sangre salvaje.", temperament: "Extremadamente sociables y extrovertidos.", img: "https://images.unsplash.com/photo-1602265587623-e2189d637a76?w=800&h=600&fit=crop", weight: "4-7 kg", lifespan: "15-18 anos", personality: "Sociable, atletico", colors: ["Tawny","Chocolate","Canela","Azul","Lavanda","Fawn"], care: "Cepillado semanal."
+  },
+  {
+    id: "chartreux-cat", name: "Chartreux", nameEng: "Chartreux", origin: "Francia", type: "pelo-corto",
+    desc: "El gato sonriente frances. Robusto, pelaje azul grisaceo y ojos cobrizos. Expresion que parece sonrisa.", history: "Criados por monjes cartujos desde el siglo XVIII.", temperament: "Silenciosos, observadores, muy inteligentes.", img: "https://images.unsplash.com/photo-1536590158209-e9d317d0c16f?w=800&h=600&fit=crop", weight: "4-7 kg", lifespan: "13-16 anos", personality: "Silencioso, observador", colors: ["Azul grisaceo"], care: "Cepillado semanal."
+  },
+  {
+    id: "japanese-bobtail-cat", name: "Bobtail Japones", nameEng: "Japanese Bobtail", origin: "Japon", type: "pelo-corto",
+    desc: "El Maneki Neko de la suerte. Cola corta como pompon. Activos e inteligentes.", history: "En Japon hace mas de 1000 anos. Simbolo de fortuna.", temperament: "Muy vocales, activos y sociales.", img: "https://images.unsplash.com/photo-1571566882372-1598d88abd90?w=800&h=600&fit=crop", weight: "2.5-4.5 kg", lifespan: "15-18 anos", personality: "Vocal, activo, suerte", colors: ["Calico","Blanco y negro","Tortuga"], care: "Cepillado semanal. Raza muy sana."
+  },
+  {
+    id: "burmilla-cat", name: "Burmilla", nameEng: "Burmilla", origin: "Reino Unido", type: "pelo-corto",
+    desc: "Mezcla Burmes + Chinchilla Persa. Plateado sombreado, ojos verdes. Dulce y jugueton.", history: "Romance accidental en 1981.", temperament: "Dulces, juguetones, ronronean constantemente.", img: "https://images.unsplash.com/photo-1611915387289-08be07d7ce0d?w=800&h=600&fit=crop", weight: "3-6 kg", lifespan: "12-16 anos", personality: "Dulce, jugueton", colors: ["Plata","Dorado","Crema"], care: "Cepillado semanal."
+  },
+  {
+    id: "peterbald-cat", name: "Peterbald", nameEng: "Peterbald", origin: "Rusia", type: "sin-pelo", tags: ["exotico"],
+    desc: "Elegantes gatos sin pelo de San Petersburgo. Varios grados de calvicie. Graciles y carinosos.", history: "Creados en 1994 en San Petersburgo.", temperament: "Muy carinosos e interactivos.", img: "https://images.unsplash.com/photo-1501820488136-72669149e0d4?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "12-15 anos", personality: "Carinoso, interactivo", colors: ["Todos"], care: "Banios semanales. Proteger del frio."
+  },
+  {
+    id: "lykoi-cat", name: "Lykoi", nameEng: "Lykoi", origin: "Estados Unidos", type: "pelo-corto", tags: ["exotico"],
+    desc: "El gato lobo. Pelaje parcial, ojos intensos, apariencia licantropa. Carinosos, leales.", history: "Mutacion natural de 2010. Lykoi = lobo en griego.", temperament: "Leales como perros, cautelosos al principio.", img: "https://images.unsplash.com/photo-1577023311546-cdc07a8454d5?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "12-15 anos", personality: "Leal, inteligente, lobo", colors: ["Negro roano"], care: "Cuidados especiales de piel."
+  },
+  {
+    id: "selkirk-rex-cat", name: "Selkirk Rex", nameEng: "Selkirk Rex", origin: "Estados Unidos", type: "pelo-largo",
+    desc: "El gato con permanente. Pelaje rizado, robusto y paciente.", history: "Montana, 1987.", temperament: "Extremadamente pacientes.", img: "https://images.unsplash.com/photo-1606214174790-dd4a9a1b0e7b?w=800&h=600&fit=crop", weight: "4-7 kg", lifespan: "12-16 anos", personality: "Paciente, tolerante", colors: ["Todos"], care: "Cepillado bisemanal."
+  },
+  {
+    id: "tonkines-cat", name: "Tonkines", nameEng: "Tonkinese", origin: "Canada", type: "pelo-corto",
+    desc: "Equilibrio Siamés + Burmes. Juguetones con elegancia.", history: "Creados en los 60.", temperament: "Juguetones, interactivos.", img: "https://images.unsplash.com/photo-1592194996308-7b43878e84a0?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "12-16 anos", personality: "Juguetón, interactivo", colors: ["Mink","Champan","Platino","Azul"], care: "Cepillado semanal."
+  },
+  {
+    id: "khao-manee-cat", name: "Khao Manee", nameEng: "Khao Manee", origin: "Tailandia", type: "pelo-corto",
+    desc: "Gato Ojo de Diamante. Blanco puro, ojos azules/dorados. Rarisimo.", history: "Reservado a la realeza tailandesa.", temperament: "Curiosos, inteligentes.", img: "https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "14-18 anos", personality: "Curioso, joya", colors: ["Blanco puro"], care: "Cepillado semanal."
+  },
+  {
+    id: "cymric-cat", name: "Cymric", nameEng: "Cymric", origin: "Isla de Man", type: "pelo-largo",
+    desc: "Manx pelilargo sin cola. Redondeado, inteligente, jugueton.", history: "Mutacion de Isla de Man.", temperament: "Juguetones, buscan objetos.", img: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=800&h=600&fit=crop", weight: "4-6 kg", lifespan: "12-15 anos", personality: "Juguetón, leal", colors: ["Todos"], care: "Cepillado frecuente."
+  },
+  {
+    id: "korat-cat", name: "Korat", nameEng: "Korat", origin: "Tailandia", type: "pelo-corto",
+    desc: "Gato de la buena suerte. Azul plateado, ojos verdes esmeralda. Antiquisimo.", history: "Manuscritos tailandeses del siglo XIV.", temperament: "Carinosos, inteligentes.", img: "https://images.unsplash.com/photo-1597626133663-53dfddb9446c?w=800&h=600&fit=crop", weight: "3-4.5 kg", lifespan: "12-16 anos", personality: "Carinoso, suerte", colors: ["Azul plateado"], care: "Cepillado semanal."
+  },
+  {
+    id: "singapura-cat", name: "Singapura", nameEng: "Singapura", origin: "Singapur", type: "pelo-corto",
+    desc: "La raza mas pequena del mundo. Diminuto, ojos enormes, pelaje sepia ticked.", history: "Gatos callejeros de Singapur, anos 70.", temperament: "Extrovertidos, curiosos, juguetones.", img: "https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=800&h=600&fit=crop", weight: "2-3 kg", lifespan: "12-15 anos", personality: "Diminuto, curioso", colors: ["Sepia agouti"], care: "Cepillado semanal."
+  },
+  {
+    id: "laperm-cat", name: "LaPerm", nameEng: "LaPerm", origin: "Estados Unidos", type: "pelo-largo",
+    desc: "Gato de pelaje rizado natural. Nacen calvos y desarrollan rizos. Carinosos.", history: "Mutacion en Oregón, 1982.", temperament: "Carinosos, juguetones, curiosos.", img: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&h=600&fit=crop", weight: "3-5 kg", lifespan: "12-15 anos", personality: "Carinoso, rizado", colors: ["Todos"], care: "Cepillado ligero."
+  }
+];
    332|
    333|// =========== STATE ===========
    334|let currentFilter = 'all';
@@ -468,34 +540,31 @@
    468|  document.body.style.overflow = '';
    469|}
    470|
-   471|// Keyboard: Escape to close
-   472|document.addEventListener('keydown', e => {
-   473|  if (e.key === 'Escape') closeBreed();
-   474|});
-   475|
-   476|// =========== FILTERS ===========
-   477|document.querySelectorAll('.chip').forEach(chip => {
-   478|  chip.addEventListener('click', function() {
-   479|    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-   480|    this.classList.add('active');
-   481|    currentFilter = this.dataset.filter;
-   482|    renderBreeds();
-   483|  });
-   484|});
-   485|
-   486|// =========== SEARCH ===========
-   487|document.getElementById('searchInput').addEventListener('input', function(e) {
-   488|  searchQuery = e.target.value;
-   489|  renderBreeds();
-   490|});
-   491|
-   492|// =========== INIT ===========
-   493|document.addEventListener('DOMContentLoaded', () => {
-   494|  renderBreeds();
-   495|  // Set initial breed count
-   496|  document.getElementById('breedCount').textContent = breeds.length;
-   497|});
-   498|
-   499|// Modal close button
-   500|document.getElementById('modalClose').addEventListener('click', closeBreed);
+// Keyboard: Escape to close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeBreed();
+});
+
+// =========== INIT ===========
+(function() {
+  // Filters
+  document.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      renderBreeds();
+    });
+  });
+  // Search
+  var si = document.getElementById('searchInput');
+  if (si) si.addEventListener('input', function(e) { searchQuery = e.target.value; renderBreeds(); });
+  // Modal close
+  var mc = document.getElementById('modalClose');
+  if (mc) mc.addEventListener('click', closeBreed);
+  // Initial render
+  renderBreeds();
+  var bc = document.getElementById('breedCount');
+  if (bc) bc.textContent = breeds.length;
+})();
    501|
