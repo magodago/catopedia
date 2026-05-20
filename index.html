@@ -1,59 +1,36 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catopedia - Razas de Gatos</title>
-<style>
-body { background: #080013; color: #e8e0ff; font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
-h1 { color: #00d4ff; text-align: center; font-size: 2em; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; max-width: 1100px; margin: 20px auto; }
-.card { background: #0d0020; border: 1px solid #1a0040; border-radius: 12px; padding: 15px; }
-.card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; background: #1a0040; }
-.card h3 { color: #00d4ff; margin: 10px 0 5px; }
-.card p { color: #8b7baa; font-size: 0.85em; margin: 3px 0; }
-#info { text-align: center; color: #6b5b8a; margin: 10px 0; }
-</style>
-</head>
-<body>
-<h1>🐱 Catopedia</h1>
-<p id="info">Cargando razas...</p>
-<div class="grid" id="grid"></div>
-
+<html><head><meta charset="UTF-8"><title>Test</title></head>
+<body style="background:#080013;color:#e8e0ff;padding:20px;font-family:Arial">
+<h1 style="color:#00d4ff">Catopedia Test</h1>
+<p id="msg">Testing...</p>
+<div id="grid"></div>
 <script>
+var el = document.getElementById('msg');
+el.textContent = 'Script is running!';
+
 var breeds = [
-  {name:"Siamés",origin:"Tailandia",img:"images/siames.png",desc:"Una de las razas más antiguas. Vocales, inteligentes y leales."},
-  {name:"Persa",origin:"Irán",img:"images/persa.png",desc:"El epítome del lujo felino. Pelaje exuberante."},
-  {name:"Maine Coon",origin:"EE.UU",img:"images/maine-coon.png",desc:"El gigante gentil. La raza doméstica más grande."},
-  {name:"Bengalí",origin:"EE.UU",img:"images/bengali.png",desc:"Un leopardo en miniatura. Pelaje moteado espectacular."},
-  {name:"Sphynx",origin:"Canadá",img:"images/sphynx.png",desc:"El gato sin pelo más famoso. Piel cálida."},
-  {name:"Británico",origin:"Reino Unido",img:"images/british.png",desc:"El osito de peluche felino. Robusto y tranquilo."},
-  {name:"Ragdoll",origin:"EE.UU",img:"images/ragdoll.png",desc:"Famosos por relajarse como muñecos de trapo."},
-  {name:"Scottish Fold",origin:"Escocia",img:"images/scottish.png",desc:"Orejas plegadas únicas. Dulces y tranquilos."},
-  {name:"Abisinio",origin:"Etiopía",img:"images/abisinio.png",desc:"Una de las razas más antiguas. Pelaje ticked."},
-  {name:"Bosque de Noruega",origin:"Noruega",img:"images/noruego.png",desc:"El gato vikingo. Robusto y pelaje impermeable."},
-  {name:"Savannah",origin:"EE.UU",img:"images/savannah.png",desc:"Híbrido de serval africano. La raza más alta."},
-  {name:"Korat",origin:"Tailandia",img:"images/korat.png",desc:"Gato de la buena suerte. Azul plateado."},
-  {name:"Azul Ruso",origin:"Rusia",img:"images/azul-ruso.png",desc:"Elegancia plateada. Ojos verde esmeralda."},
-  {name:"Devon Rex",origin:"Reino Unido",img:"images/devon-rex.png",desc:"El gato duende. Orejas enormes y rizos."},
-  {name:"Tonkinés",origin:"Canadá",img:"images/tonkines.png",desc:"Equilibrio Siamés + Burmés. Juguetón."},
+  {name:"Siames",origin:"Tailandia",img:"images/siames.png",desc:"Raza antigua"},
+  {name:"Persa",origin:"Iran",img:"images/persa.png",desc:"Lujoso"}
 ];
 
-document.getElementById('info').textContent = breeds.length + ' razas listas';
+el.textContent = breeds.length + ' breeds loaded';
 
 var grid = document.getElementById('grid');
 for (var i = 0; i < breeds.length; i++) {
   var b = breeds[i];
   var card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = '<img src="' + b.img + '" alt="' + b.name + '" onerror="this.style.display=\\'none\\'">' +
-    '<h3>' + b.name + '</h3>' +
-    '<p>📍 ' + b.origin + '</p>' +
-    '<p>' + b.desc + '</p>';
+  card.style.background = '#0d0020';
+  card.style.border = '1px solid #1a0040';
+  card.style.borderRadius = '12px';
+  card.style.padding = '15px';
+  card.style.margin = '10px 0';
+  card.innerHTML = '<img src="' + b.img + '" style="width:100%;height:180px;object-fit:cover;border-radius:8px" alt="">' +
+    '<h3 style="color:#00d4ff">' + b.name + '</h3>' +
+    '<p style="color:#8b7baa">' + b.origin + '</p>' +
+    '<p style="color:#8b7baa">' + b.desc + '</p>';
   grid.appendChild(card);
 }
 
-document.getElementById('info').textContent = '✅ ' + breeds.length + ' razas cargadas';
+el.textContent = 'DONE! ' + breeds.length + ' breeds rendered';
 </script>
-</body>
-</html>
+</body></html>
